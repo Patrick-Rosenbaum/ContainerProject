@@ -1,0 +1,29 @@
+version: '2'
+
+services:
+  # Reverse Proxy Konfiguration
+  nginx:
+    image: christianheimke/demo-backend-proxy
+    ports:
+    - "8080:80"
+
+  # Frontend Container, diese muss den Dienst auf Port 80 bereitstellen
+  frontend:
+    # Dieses Image mit dem eigenen Frontend-Image ersetzen
+    image: lomber/frontend:01
+    depends_on:
+      - nginx
+    ports:
+    - "80:80"
+
+  # Backend Container, diese muss den Dienst auf Port 5000 bereitstellen,
+  # oder die PORT-Umgebungsvariable entsprechen konfigurieren
+  backend:
+    # Dieses Image mit dem eigenen Backend-Image ersetzen
+    image: lomber/nodejs_backend:01
+    depends_on:
+      - nginx
+    volumes:
+      - C:\User\Patrick\Documents\Techstarter\API_COPY\api_vorlage_test\data.csv:/app/data.csv
+    ports:
+    - "5000:5000"
